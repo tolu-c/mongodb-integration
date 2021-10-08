@@ -37,10 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    "corsheaders",
     'mongo.apps.MongoConfig',
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'mongodb.urls'
 
@@ -76,18 +81,14 @@ WSGI_APPLICATION = 'mongodb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'CLIENT': {
+            'host': 'mongodb+srv://admin:qJca8uK68U7pzaEE@theblog.zlws9.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+            'name': 'theblog',
+            'authMechanism': 'SCRAM-SHA-1'
+        }
     }
 }
-
-# DATABASES = {
-#        'default': {
-#            'ENGINE': 'djongo',
-#            'NAME': 'testdb',
-#        }
-#    }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

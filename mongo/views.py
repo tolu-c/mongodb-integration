@@ -4,17 +4,39 @@ from .models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
 from .forms import EmailPostForm
+from rest_framework.parsers import JSONParser
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import PostSerializer
+from mongo import serializers
 
 # Create your views here.
 
 
-class PostListView(ListView):
-    queryset = Post.published.all()
-    context_object_name = 'posts'
-    paginate_by = 5
-    template_name = 'blog\post\list.html'
+@api_view(['GET'])
+def api(request):
+    api_urls = {
+        'List': '/post-list/',
+        'Detail': '/post-detail/<str:pk>/',
+        'Create': '/post-create/',
+        'Update': '/post-update/<str:pk>/',
+        'Delete': '/post-delete/<str:pk>/',
+    }
+    return Response(api_urls)
 
 
+# class PostListView(ListView):
+#     queryset = Post.published.all()
+#     context_object_name = 'posts'
+#     paginate_by = 5
+#     template_name = 'blog\post\list.html'
+
+
+@api_view(['GET'])
+def post_list(request):
+    post = Post.published.all()
+    serializer = PostSerializer(post, many=True)
+    return Response(serializer.data)
 # def post_list(request):
 #     object_list = Post.published.all()
 #     paginator = Paginator(object_list, 5)
